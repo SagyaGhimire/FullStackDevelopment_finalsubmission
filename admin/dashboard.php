@@ -26,9 +26,8 @@ require_once "../includes/auth.php";
     </div>
 
     <div class="main-content">
-
         <div class="header">
-            <h1>Welcome to Library Management System, <?php echo htmlspecialchars($_SESSION["username"]); ?></h1>
+            <h1>Welcome to Library Management System, <?php echo htmlspecialchars($_SESSION["username"]);?></h1>
         </div>
 
         <div class="card">
