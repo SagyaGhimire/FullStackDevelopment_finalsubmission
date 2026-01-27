@@ -12,7 +12,6 @@ require_once "../includes/auth.php";
 <body>
 
 <div class="wrapper">
-
     <div class="sidebar">
         <h2>Library Management System</h2>
         <ul>
@@ -29,19 +28,19 @@ require_once "../includes/auth.php";
     <div class="main-content">
 
         <div class="header">
-            <h1>Welcome, <?php echo htmlspecialchars($_SESSION["username"]); ?></h1>
+            <h1>Welcome to Library Management System, <?php echo htmlspecialchars($_SESSION["username"]); ?></h1>
         </div>
 
         <div class="card">
             <h3>Search Books</h3>
             <div class="search-box">
-                <input type="text" id="searchBox" placeholder="Type book title or author...">
+                <input type="text" id="searchBox" placeholder="Type book,category or author...">
             </div>
             <ul id="result"></ul>
         </div>
 
         <div class="footer">
-            &copy; <?php echo date("Y"); ?> Library Management System
+            &copy; <?php echo date("Y"); ?>Library Management System
         </div>
 
     </div>
