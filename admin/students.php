@@ -1,9 +1,12 @@
 <?php
 require_once "../includes/auth.php";
 require_once "../config/db.php";
+require_once "../includes/csrf.php";
 
-//adding students
+/* Add student */
 if (isset($_POST['add_student'])) {
+    verify_csrf_token($_POST['csrf_token']);
+
     $stmt = $pdo->prepare(
         "INSERT INTO students (name, email, roll_no, department)
          VALUES (?, ?, ?, ?)"
@@ -18,7 +21,7 @@ if (isset($_POST['add_student'])) {
     exit;
 }
 
-//Deleting students
+/* Delete student */
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM students WHERE student_id=?");
     $stmt->execute([$_GET['delete']]);
@@ -26,7 +29,6 @@ if (isset($_GET['delete'])) {
     exit;
 }
 
-// Fetching students 
 $students = $pdo->query("SELECT * FROM students")->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -36,7 +38,6 @@ $students = $pdo->query("SELECT * FROM students")->fetchAll();
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-
 <div class="wrapper">
 
 <div class="sidebar">
@@ -53,12 +54,12 @@ $students = $pdo->query("SELECT * FROM students")->fetchAll();
 </div>
 
 <div class="main-content">
-
 <div class="header"><h1>Manage Students</h1></div>
 
 <div class="card">
 <h3>Add Student</h3>
 <form method="post">
+    <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
     <input type="text" name="name" placeholder="Student Name" required>
     <input type="email" name="email" placeholder="Email">
     <input type="text" name="roll_no" placeholder="Roll Number">
@@ -71,19 +72,19 @@ $students = $pdo->query("SELECT * FROM students")->fetchAll();
 <h3>Student List</h3>
 <table>
 <tr>
-    <th>ID</th><th>Name</th><th>Email</th><th>Roll No</th><th>Department</th><th>Action</th>
+<th>ID</th><th>Name</th><th>Email</th><th>Roll</th><th>Dept</th><th>Action</th>
 </tr>
 <?php foreach ($students as $s): ?>
 <tr>
-    <td><?= $s['student_id'] ?></td>
-    <td><?= htmlspecialchars($s['name']) ?></td>
-    <td><?= htmlspecialchars($s['email']) ?></td>
-    <td><?= htmlspecialchars($s['roll_no']) ?></td>
-    <td><?= htmlspecialchars($s['department']) ?></td>
-    <td class="action-links">
-        <a href="edit_student.php?id=<?= $s['student_id'] ?>">Edit</a>|
-        <a href="?delete=<?= $s['student_id'] ?>" onclick="return confirm('Delete this student?')">Delete</a>
-    </td>
+<td><?= $s['student_id'] ?></td>
+<td><?= htmlspecialchars($s['name']) ?></td>
+<td><?= htmlspecialchars($s['email']) ?></td>
+<td><?= htmlspecialchars($s['roll_no']) ?></td>
+<td><?= htmlspecialchars($s['department']) ?></td>
+<td class="action-links">
+<a href="edit_student.php?id=<?= $s['student_id'] ?>">Edit</a> |
+<a href="?delete=<?= $s['student_id'] ?>" onclick="return confirm('Delete student?')">Delete</a>
+</td>
 </tr>
 <?php endforeach; ?>
 </table>

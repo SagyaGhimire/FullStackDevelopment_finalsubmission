@@ -12,6 +12,7 @@ require_once "../includes/auth.php";
 <body>
 
 <div class="wrapper">
+
     <div class="sidebar">
         <h2>Library Management System</h2>
         <ul>
@@ -26,20 +27,21 @@ require_once "../includes/auth.php";
     </div>
 
     <div class="main-content">
+
         <div class="header">
-            <h1>Welcome to Library Management System, <?php echo htmlspecialchars($_SESSION["username"]);?></h1>
+            <h1>Welcome to Library Management System, <?php echo htmlspecialchars($_SESSION["username"]); ?></h1>
         </div>
 
         <div class="card">
             <h3>Search Books</h3>
             <div class="search-box">
-                <input type="text" id="searchBox" placeholder="Type book,category or author...">
+                <input type="text" id="searchBox" placeholder="Authorname, Bookname or Category">
             </div>
             <ul id="result"></ul>
         </div>
 
         <div class="footer">
-            &copy; <?php echo date("Y"); ?>Library Management System
+            &copy; <?php echo date("Y"); ?> Library Management System
         </div>
 
     </div>
@@ -58,9 +60,21 @@ document.getElementById("searchBox").addEventListener("keyup", function () {
         .then(res => res.json())
         .then(data => {
             let list = "";
+
             data.forEach(item => {
-                list += "<li>" + item + "</li>";
+                list += `
+                    <li>
+                        <a href="book_details.php?id=${item.book_id}">
+                            <strong>${item.title}</strong>
+                        </a><br>
+                        <small>
+                            Author: ${item.author} |
+                            Category: ${item.category}
+                        </small>
+                    </li>
+                `;
             });
+
             document.getElementById("result").innerHTML = list;
         });
 });

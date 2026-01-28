@@ -2,7 +2,7 @@
 require_once "../includes/auth.php";
 require_once "../config/db.php";
 
-//Fetch issued books
+//fetching issued books
 $stmt = $pdo->query(
     "SELECT issued_books.issue_id, students.name, books.title, issued_books.issue_date
      FROM issued_books

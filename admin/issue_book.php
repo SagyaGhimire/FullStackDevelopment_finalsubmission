@@ -1,14 +1,29 @@
 <?php
 require_once "../includes/auth.php";
 require_once "../config/db.php";
+require_once "../includes/csrf.php";
 
-//fetching student data
+/* Fetch students */
 $students = $pdo->query("SELECT * FROM students")->fetchAll();
 
-//fetching the available books
+/* Fetch available books */
 $books = $pdo->query("SELECT * FROM books WHERE quantity > 0")->fetchAll();
-//issuing books
+
+/* Fetch issued books */
+$issuedBooks = $pdo->query(
+    "SELECT issued_books.issue_id, students.name AS student_name,
+            books.title AS book_title, issued_books.issue_date
+     FROM issued_books
+     JOIN students ON issued_books.student_id = students.student_id
+     JOIN books ON issued_books.book_id = books.book_id
+     WHERE issued_books.status = 'issued'
+     ORDER BY issued_books.issue_date DESC"
+)->fetchAll();
+
+/* Issue book */
 if (isset($_POST['issue_book'])) {
+    verify_csrf_token($_POST['csrf_token']);
+
     $student_id = $_POST['student_id'];
     $book_id = $_POST['book_id'];
     $issue_date = date("Y-m-d");
@@ -24,7 +39,6 @@ if (isset($_POST['issue_book'])) {
     );
     $update->execute([$book_id]);
 
-    // successful popup message
     $_SESSION['success'] = "Book issued successfully!";
     header("Location: issue_book.php");
     exit;
@@ -42,7 +56,7 @@ if (isset($_POST['issue_book'])) {
 <div class="wrapper">
 
 <div class="sidebar">
-    <h2>Library Management System</h2>
+    <h2>Library System</h2>
     <ul>
         <li><a href="dashboard.php">Dashboard</a></li>
         <li><a href="students.php">Manage Students</a></li>
@@ -60,8 +74,13 @@ if (isset($_POST['issue_book'])) {
     <h1>Issue Book</h1>
 </div>
 
+<!-- ISSUE FORM -->
 <div class="card">
+<h3>Issue New Book</h3>
+
 <form method="post">
+    <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
+
     <label>Select Student</label>
     <select name="student_id" required>
         <option value="">Select Student</option>
@@ -84,6 +103,33 @@ if (isset($_POST['issue_book'])) {
 
     <button type="submit" name="issue_book">Issue Book</button>
 </form>
+</div>
+
+<!-- ISSUED BOOKS TABLE -->
+<div class="card">
+<h3>Issued Books</h3>
+
+<table>
+<tr>
+    <th>Student</th>
+    <th>Book</th>
+    <th>Issue Date</th>
+</tr>
+
+<?php if (count($issuedBooks) === 0): ?>
+<tr>
+    <td colspan="3">No books currently issued.</td>
+</tr>
+<?php else: ?>
+<?php foreach ($issuedBooks as $row): ?>
+<tr>
+    <td><?= htmlspecialchars($row['student_name']); ?></td>
+    <td><?= htmlspecialchars($row['book_title']); ?></td>
+    <td><?= htmlspecialchars($row['issue_date']); ?></td>
+</tr>
+<?php endforeach; ?>
+<?php endif; ?>
+</table>
 </div>
 
 </div>

@@ -1,16 +1,16 @@
 <?php
 require_once "../includes/auth.php";
 require_once "../config/db.php";
+require_once "../includes/csrf.php";
 
-// Checking if the ID exists or not
+/* Check if ID exists */
 if (!isset($_GET['id'])) {
     header("Location: books.php");
     exit;
 }
-
 $id = $_GET['id'];
 
-// Fetching book data
+/* Fetch book data */
 $stmt = $pdo->prepare("SELECT * FROM books WHERE book_id = ?");
 $stmt->execute([$id]);
 $book = $stmt->fetch();
@@ -20,16 +20,12 @@ if (!$book) {
     exit;
 }
 
-// Fetching categories
+/* Fetch categories */
 $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
 
-// Updating books
+/* Update book */
 if (isset($_POST['update_book'])) {
-    $title = $_POST['title'];
-    $author = $_POST['author'];
-    $category_id = $_POST['category_id'];
-    $year = $_POST['publication_year'];
-    $quantity = $_POST['quantity'];
+    verify_csrf_token($_POST['csrf_token']);
 
     $stmt = $pdo->prepare(
         "UPDATE books 
@@ -38,11 +34,11 @@ if (isset($_POST['update_book'])) {
     );
 
     $stmt->execute([
-        $title,
-        $author,
-        $category_id,
-        $year,
-        $quantity,
+        $_POST['title'],
+        $_POST['author'],
+        $_POST['category_id'],
+        $_POST['publication_year'],
+        $_POST['quantity'],
         $id
     ]);
 
@@ -59,35 +55,65 @@ if (isset($_POST['update_book'])) {
 </head>
 <body>
 
-<h2>Edit Book</h2>
+<div class="wrapper">
 
+<div class="sidebar">
+    <h2>Library Management System</h2>
+    <ul>
+        <li><a href="dashboard.php">Dashboard</a></li>
+        <li><a href="students.php">Manage Students</a></li>
+        <li><a href="categories.php">Manage Categories</a></li>
+        <li><a href="books.php">Manage Books</a></li>
+        <li><a href="issue_book.php">Issue Books</a></li>
+        <li><a href="return_book.php">Return Books</a></li>
+        <li><a href="../logout.php">Logout</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+
+<div class="header">
+    <h1>Edit Book</h1>
+</div>
+
+<div class="card">
 <form method="post">
-    <label>Title</label><br>
-    <input type="text" name="title" value="<?php echo htmlspecialchars($book['title']); ?>" required><br><br>
 
-    <label>Author</label><br>
-    <input type="text" name="author" value="<?php echo htmlspecialchars($book['author']); ?>" required><br><br>
+    <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
 
-    <label>Category</label><br>
+    <label>Title</label>
+    <input type="text" name="title"
+           value="<?= htmlspecialchars($book['title']); ?>" required>
+
+    <label>Author</label>
+    <input type="text" name="author"
+           value="<?= htmlspecialchars($book['author']); ?>" required>
+
+    <label>Category</label>
     <select name="category_id" required>
         <?php foreach ($categories as $cat): ?>
-            <option value="<?php echo $cat['category_id']; ?>"
-                <?php if ($cat['category_id'] == $book['category_id']) echo "selected"; ?>>
-                <?php echo htmlspecialchars($cat['category_name']); ?>
+            <option value="<?= $cat['category_id']; ?>"
+                <?= ($cat['category_id'] == $book['category_id']) ? 'selected' : ''; ?>>
+                <?= htmlspecialchars($cat['category_name']); ?>
             </option>
         <?php endforeach; ?>
-    </select><br><br>
+    </select>
 
-    <label>Publication Year</label><br>
+    <label>Publication Year</label>
     <input type="number" name="publication_year"
-           value="<?php echo $book['publication_year']; ?>" required><br><br>
+           value="<?= $book['publication_year']; ?>" required>
 
-    <label>Quantity</label><br>
+    <label>Quantity</label>
     <input type="number" name="quantity"
-           value="<?php echo $book['quantity']; ?>" required><br><br>
+           value="<?= $book['quantity']; ?>" required>
 
     <button type="submit" name="update_book">Update Book</button>
+
 </form>
+</div>
+
+</div>
+</div>
 
 </body>
 </html>

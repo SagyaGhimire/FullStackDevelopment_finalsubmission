@@ -1,8 +1,11 @@
 <?php
 require_once "../includes/auth.php";
 require_once "../config/db.php";
+require_once "../includes/csrf.php";
 
 if (isset($_POST['add_book'])) {
+    verify_csrf_token($_POST['csrf_token']);
+
     $stmt = $pdo->prepare(
         "INSERT INTO books (title, author, category_id, publication_year, quantity)
          VALUES (?, ?, ?, ?, ?)"
@@ -19,7 +22,8 @@ if (isset($_POST['add_book'])) {
 }
 
 if (isset($_GET['delete'])) {
-    $pdo->prepare("DELETE FROM books WHERE book_id=?")->execute([$_GET['delete']]);
+    $pdo->prepare("DELETE FROM books WHERE book_id=?")
+        ->execute([$_GET['delete']]);
     header("Location: books.php");
     exit;
 }
@@ -34,14 +38,13 @@ $books = $pdo->query(
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manage Books</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+<title>Manage Books</title>
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-
 <div class="wrapper">
 <div class="sidebar">
-    <h2>Library System</h2>
+    <h2>Library Management System</h2>
     <ul>
         <li><a href="dashboard.php">Dashboard</a></li>
         <li><a href="students.php">Manage Students</a></li>
@@ -57,26 +60,29 @@ $books = $pdo->query(
 <div class="header"><h1>Manage Books</h1></div>
 
 <div class="card">
-<h3>Add Book</h3>
 <form method="post">
-    <input name="title" placeholder="Book Title" required>
-    <input name="author" placeholder="Author" required>
-    <select name="category_id" required>
-        <option value="">Select Category</option>
-        <?php foreach ($categories as $c): ?>
-        <option value="<?= $c['category_id'] ?>"><?= htmlspecialchars($c['category_name']) ?></option>
-        <?php endforeach; ?>
-    </select>
-    <input type="number" name="publication_year" placeholder="Year" required>
-    <input type="number" name="quantity" placeholder="Quantity" required>
-    <button name="add_book">Add Book</button>
+
+<input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
+<input name="title" placeholder="Book Title" required>
+<input name="author" placeholder="Author" required>
+
+<select name="category_id" required>
+<option value="">Select Category</option>
+<?php foreach ($categories as $c): ?>
+<option value="<?= $c['category_id'] ?>"><?= htmlspecialchars($c['category_name']) ?></option>
+<?php endforeach; ?>
+</select>
+
+<input type="number" name="publication_year" placeholder="Year" required>
+<input type="number" name="quantity" placeholder="Quantity" required>
+<button name="add_book">Add Book</button>
 </form>
 </div>
 
 <div class="card">
 <h3>Book List</h3>
 <table>
-<tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Year</th><th>Quantity</th><th>Action</th></tr>
+<tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Year</th><th>Qty</th><th>Action</th></tr>
 <?php foreach ($books as $b): ?>
 <tr>
 <td><?= $b['book_id'] ?></td>
@@ -87,7 +93,7 @@ $books = $pdo->query(
 <td><?= $b['quantity'] ?></td>
 <td class="action-links">
 <a href="edit_book.php?id=<?= $b['book_id'] ?>">Edit</a>|
-<a href="?delete=<?= $b['book_id'] ?>" onclick="return confirm('Delete this book?')">Delete</a>
+<a href="?delete=<?= $b['book_id'] ?>" onclick="return confirm('Delete book?')">Delete</a>
 </td>
 </tr>
 <?php endforeach; ?>
