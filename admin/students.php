@@ -3,7 +3,6 @@ require_once "../includes/auth.php";
 require_once "../config/db.php";
 require_once "../includes/csrf.php";
 
-/* Add student */
 if (isset($_POST['add_student'])) {
     verify_csrf_token($_POST['csrf_token']);
 
@@ -21,7 +20,6 @@ if (isset($_POST['add_student'])) {
     exit;
 }
 
-/* Delete student */
 if (isset($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM students WHERE student_id=?");
     $stmt->execute([$_GET['delete']]);
@@ -61,7 +59,7 @@ $students = $pdo->query("SELECT * FROM students")->fetchAll();
 <form method="post">
     <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
     <input type="text" name="name" placeholder="Student Name" required>
-    <input type="email" name="email" placeholder="Email">
+    <input type="email" name="email" placeholder="Email Address">
     <input type="text" name="roll_no" placeholder="Roll Number">
     <input type="text" name="department" placeholder="Department">
     <button type="submit" name="add_student">Add Student</button>
@@ -72,7 +70,7 @@ $students = $pdo->query("SELECT * FROM students")->fetchAll();
 <h3>Student List</h3>
 <table>
 <tr>
-<th>ID</th><th>Name</th><th>Email</th><th>Roll</th><th>Dept</th><th>Action</th>
+<th>ID</th><th>Student Name</th><th>Email Address</th><th>Roll Number</th><th>Department</th><th>Action</th>
 </tr>
 <?php foreach ($students as $s): ?>
 <tr>
@@ -83,7 +81,7 @@ $students = $pdo->query("SELECT * FROM students")->fetchAll();
 <td><?= htmlspecialchars($s['department']) ?></td>
 <td class="action-links">
 <a href="edit_student.php?id=<?= $s['student_id'] ?>">Edit</a> |
-<a href="?delete=<?= $s['student_id'] ?>" onclick="return confirm('Delete student?')">Delete</a>
+<a href="?delete=<?= $s['student_id'] ?>" onclick="return confirm('Delete this student?')">Delete</a>
 </td>
 </tr>
 <?php endforeach; ?>

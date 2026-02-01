@@ -41,7 +41,7 @@ require_once "../includes/auth.php";
         </div>
 
         <div class="footer">
-            &copy; <?php echo date("Y"); ?> Library Management System
+            &copy; <?php echo date("Y"); ?> Sagya Ghimire Library Management System
         </div>
 
     </div>
@@ -68,8 +68,8 @@ document.getElementById("searchBox").addEventListener("keyup", function () {
                             <strong>${item.title}</strong>
                         </a><br>
                         <small>
-                            Author: ${item.author} |
-                            Category: ${item.category}
+                            Author Name: ${item.author} |
+                            Genre: ${item.category}
                         </small>
                     </li>
                 `;

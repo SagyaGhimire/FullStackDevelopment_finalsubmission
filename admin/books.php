@@ -82,7 +82,7 @@ $books = $pdo->query(
 <div class="card">
 <h3>Book List</h3>
 <table>
-<tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Year</th><th>Qty</th><th>Action</th></tr>
+<tr><th>ID</th><th>Book Title</th><th>Author Name</th><th>Genre</th><th>Published Year</th><th>Quantity</th><th>Action</th></tr>
 <?php foreach ($books as $b): ?>
 <tr>
 <td><?= $b['book_id'] ?></td>
@@ -93,7 +93,7 @@ $books = $pdo->query(
 <td><?= $b['quantity'] ?></td>
 <td class="action-links">
 <a href="edit_book.php?id=<?= $b['book_id'] ?>">Edit</a>|
-<a href="?delete=<?= $b['book_id'] ?>" onclick="return confirm('Delete book?')">Delete</a>
+<a href="?delete=<?= $b['book_id'] ?>" onclick="return confirm('Are you sure you wnat to delete this book?')">Delete</a>
 </td>
 </tr>
 <?php endforeach; ?>

@@ -3,7 +3,7 @@ require_once "../includes/auth.php";
 require_once "../config/db.php";
 require_once "../includes/csrf.php";
 
-/* Check if ID exists */
+/* Check if ID exists or not */
 if (!isset($_GET['id'])) {
     header("Location: books.php");
     exit;
@@ -81,15 +81,15 @@ if (isset($_POST['update_book'])) {
 
     <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
 
-    <label>Title</label>
+    <label>Book Title</label>
     <input type="text" name="title"
            value="<?= htmlspecialchars($book['title']); ?>" required>
 
-    <label>Author</label>
+    <label>Author Name</label>
     <input type="text" name="author"
            value="<?= htmlspecialchars($book['author']); ?>" required>
 
-    <label>Category</label>
+    <label>Genre</label>
     <select name="category_id" required>
         <?php foreach ($categories as $cat): ?>
             <option value="<?= $cat['category_id']; ?>"
@@ -99,7 +99,7 @@ if (isset($_POST['update_book'])) {
         <?php endforeach; ?>
     </select>
 
-    <label>Publication Year</label>
+    <label>Published Year</label>
     <input type="number" name="publication_year"
            value="<?= $book['publication_year']; ?>" required>
 

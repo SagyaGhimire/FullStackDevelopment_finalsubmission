@@ -83,7 +83,7 @@ if (isset($_POST['update_student'])) {
     <input type="text" name="name"
            value="<?= htmlspecialchars($student['name']); ?>" required>
 
-    <label>Email</label>
+    <label>Email Address</label>
     <input type="email" name="email"
            value="<?= htmlspecialchars($student['email']); ?>">
 
@@ -91,7 +91,7 @@ if (isset($_POST['update_student'])) {
     <input type="text" name="roll_no"
            value="<?= htmlspecialchars($student['roll_no']); ?>">
 
-    <label>Department</label>
+    <label>Department of Student</label>
     <input type="text" name="department"
            value="<?= htmlspecialchars($student['department']); ?>">
 

@@ -3,7 +3,6 @@ require_once "../includes/auth.php";
 require_once "../config/db.php";
 require_once "../includes/csrf.php";
 
-/* Add category */
 if (isset($_POST['add_category'])) {
     verify_csrf_token($_POST['csrf_token']);
 
@@ -15,7 +14,6 @@ if (isset($_POST['add_category'])) {
     exit;
 }
 
-/* Delete category */
 if (isset($_GET['delete'])) {
     $pdo->prepare(
         "DELETE FROM categories WHERE category_id=?"
@@ -25,7 +23,6 @@ if (isset($_GET['delete'])) {
     exit;
 }
 
-/* Fetch categories */
 $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
 ?>
 
@@ -68,11 +65,11 @@ $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
 </div>
 
 <div class="card">
-    <h3>Category List</h3>
+    <h3>Genre List</h3>
     <table>
         <tr>
             <th>ID</th>
-            <th>Category Name</th>
+            <th>Genre Name</th>
             <th>Action</th>
         </tr>
 
@@ -82,7 +79,7 @@ $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
             <td><?= htmlspecialchars($cat['category_name']); ?></td>
             <td class="action-links">
                 <a href="?delete=<?= $cat['category_id']; ?>"
-                   onclick="return confirm('Delete this category?')">Delete</a>
+                   onclick="return confirm('Are you sure you want to delete this?')">Delete</a>
             </td>
         </tr>
         <?php endforeach; ?>

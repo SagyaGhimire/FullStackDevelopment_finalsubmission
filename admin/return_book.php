@@ -71,8 +71,8 @@ if (isset($_GET['return'])) {
 <div class="card">
 <table>
 <tr>
-    <th>Student</th>
-    <th>Book</th>
+    <th>Student Name</th>
+    <th>Book Title</th>
     <th>Issue Date</th>
     <th>Action</th>
 </tr>

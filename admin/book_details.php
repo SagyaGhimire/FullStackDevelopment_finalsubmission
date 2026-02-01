@@ -51,11 +51,11 @@ if (!$book) {
     </div>
 
     <div class="card">
-        <p><strong>Title:</strong> <?= htmlspecialchars($book['title']) ?></p>
-        <p><strong>Author:</strong> <?= htmlspecialchars($book['author']) ?></p>
-        <p><strong>Category:</strong> <?= htmlspecialchars($book['category_name']) ?></p>
-        <p><strong>Publication Year:</strong> <?= $book['publication_year'] ?></p>
-        <p><strong>Available Quantity:</strong> <?= $book['quantity'] ?></p>
+        <p><strong>Book Title:</strong> <?= htmlspecialchars($book['title']) ?></p>
+        <p><strong>Author Name:</strong> <?= htmlspecialchars($book['author']) ?></p>
+        <p><strong>Genre:</strong> <?= htmlspecialchars($book['category_name']) ?></p>
+        <p><strong>Published Year:</strong> <?= $book['publication_year'] ?></p>
+        <p><strong>Book Quantity:</strong> <?= $book['quantity'] ?></p>
 
         <br>
         <a href="dashboard.php">Back to Dashboard</a>

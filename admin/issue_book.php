@@ -3,13 +3,10 @@ require_once "../includes/auth.php";
 require_once "../config/db.php";
 require_once "../includes/csrf.php";
 
-/* Fetch students */
 $students = $pdo->query("SELECT * FROM students")->fetchAll();
 
-/* Fetch available books */
 $books = $pdo->query("SELECT * FROM books WHERE quantity > 0")->fetchAll();
 
-/* Fetch issued books */
 $issuedBooks = $pdo->query(
     "SELECT issued_books.issue_id, students.name AS student_name,
             books.title AS book_title, issued_books.issue_date
@@ -20,7 +17,6 @@ $issuedBooks = $pdo->query(
      ORDER BY issued_books.issue_date DESC"
 )->fetchAll();
 
-/* Issue book */
 if (isset($_POST['issue_book'])) {
     verify_csrf_token($_POST['csrf_token']);
 
@@ -56,7 +52,7 @@ if (isset($_POST['issue_book'])) {
 <div class="wrapper">
 
 <div class="sidebar">
-    <h2>Library System</h2>
+    <h2>Library Management System</h2>
     <ul>
         <li><a href="dashboard.php">Dashboard</a></li>
         <li><a href="students.php">Manage Students</a></li>
@@ -74,7 +70,6 @@ if (isset($_POST['issue_book'])) {
     <h1>Issue Book</h1>
 </div>
 
-<!-- ISSUE FORM -->
 <div class="card">
 <h3>Issue New Book</h3>
 
@@ -105,20 +100,19 @@ if (isset($_POST['issue_book'])) {
 </form>
 </div>
 
-<!-- ISSUED BOOKS TABLE -->
 <div class="card">
 <h3>Issued Books</h3>
 
 <table>
 <tr>
-    <th>Student</th>
-    <th>Book</th>
+    <th>Student Name</th>
+    <th>Book Name</th>
     <th>Issue Date</th>
 </tr>
 
 <?php if (count($issuedBooks) === 0): ?>
 <tr>
-    <td colspan="3">No books currently issued.</td>
+    <td colspan="3">No books issued currently!</td>
 </tr>
 <?php else: ?>
 <?php foreach ($issuedBooks as $row): ?>

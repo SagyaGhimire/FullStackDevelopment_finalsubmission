@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login</title>
+    <title>Library Admin Login</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -38,10 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Library Admin Login</h2>
 
         <form method="post">
-            <label>Username</label>
+            <label>Enter your Username:</label>
             <input type="text" name="username" required>
 
-            <label>Password</label>
+            <label>Enter your Password:</label>
             <input type="password" name="password" required>
 
             <button type="submit">Login</button>
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <div class="login-footer">
-            © <?php echo date("Y"); ?> Library Management System
+            ©<?php echo date("Y"); ?> Sagya Ghimire Library Management System
         </div>
     </div>
 

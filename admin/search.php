@@ -70,10 +70,10 @@ if (isset($_GET['search'])) {
 <?php if ($books): ?>
 <table border="1" cellpadding="5">
 <tr>
-    <th>Title</th>
-    <th>Author</th>
-    <th>Category</th>
-    <th>Year</th>
+    <th>Book Title</th>
+    <th>Author Name</th>
+    <th>Genre</th>
+    <th>Published Year</th>
     <th>Quantity</th>
 </tr>
 
