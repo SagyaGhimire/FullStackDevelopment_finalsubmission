@@ -85,7 +85,9 @@ $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
         <?php endforeach; ?>
     </table>
 </div>
-
+<div class="footer">
+            &copy; <?php echo date("Y"); ?> Sagya Ghimire Library Management System
+        </div>
 </div>
 </div>
 

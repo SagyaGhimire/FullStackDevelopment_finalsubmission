@@ -91,6 +91,9 @@ if (isset($_GET['return'])) {
 </table>
 </div>
 
+<div class="footer">
+            &copy; <?php echo date("Y"); ?> Sagya Ghimire Library Management System
+        </div>
 </div>
 </div>
 

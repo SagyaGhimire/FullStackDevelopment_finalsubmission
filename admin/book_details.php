@@ -60,9 +60,14 @@ if (!$book) {
         <br>
         <a href="dashboard.php">Back to Dashboard</a>
     </div>
+    <div class="footer">
+            &copy; <?php echo date("Y"); ?> Sagya Ghimire Library Management System
+        </div>
 </div>
 
+
 </div>
+
 
 </body>
 </html>
